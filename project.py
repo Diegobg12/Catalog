@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 app = Flask(__name__)
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Restaurant, MenuItem, user
+from database_setup import User, Category, CatItem
 
 engine = create_engine('sqlite:///restaurantmenuwithusers.db')
 Base.metadata.bind = engine
@@ -12,15 +12,15 @@ session = DBSession()
 
 
 @app.route('/')
-@app.route('/home')
+@app.route('/catalog')
 def showCategories():
     # return "This Page will show all categories and the last item added"
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
-    Category = session.query(Category).all()
-    return render_template('restaurants.html', Category = Category)
+    Categories = session.query(Category).all()
+    return render_template('home.html', Categories = Categories)
 
-@app.route('catalog/<cat_name>/items')
+@app.route('catalog/<cat_name>')
 @app.route('catalog/<cat_name>/items')
 def showItems():
     # return "This Page will show all categories and the last item added"
