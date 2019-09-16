@@ -36,8 +36,8 @@ class CatItem(Base):
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
     description = Column(String(250))
-    cat_id = Column(Integer, ForeignKey('category.id'))
-    category = relationship(category)
+    cat_name = Column(ForeignKey('category.name'))
+    category = relationship(Category)
 
     @property
     def serialize(self):
