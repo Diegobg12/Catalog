@@ -28,7 +28,8 @@ def showItems(cat_name):
     Categories = session.query(Category).all()
     Cat = session.query(Category).filter_by(name = cat_name).one()
     Items = session.query(CatItem).filter_by(cat_name = Cat.name)
-    return render_template('items.html', Categories = Categories, Items = Items)
+    return render_template('items.html', Categories = Categories, Items = Items, Cat = Cat)
+
 # @app.route('/catalog/<cat_name>/<item_name>')
 # def ItemDescription(cat_name):
 #     # return "This Page will show all categories and the last item added"
@@ -38,23 +39,21 @@ def showItems(cat_name):
 #     Items = session.query(CatItem).filter_by(cat_name = Cat.name)
 #     return render_template('items.html', Cat = Cat, Items = Items, cat_name= cat_name)
 
-# @app.route('/catalog/<cat_name>/new', methods=['GET', 'POST'])
-# def createItem(cat_name):
-#     DBSession = sessionmaker(bind=engine)
-#     session = DBSession()
-#     if request.method == 'POST':
-#         Items = session.query(Category).filter_by(name = cat_name)
-        
-#         newItem = MenuItem(
-#         name = request.form['name'],
-#         description = request.form['description']
-#         cat_name = cat_name)
-
-#         session.add(newItem)
-#         session.commit()
-#         return redirect(url_for('showItems', cat_name = catname))
-#     else:
-#         return render_template('createItem.html', cat_name = catname)
+@app.route('/catalog/<cat_name>/new', methods=['GET', 'POST'])
+def createItem(cat_name):
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
+    if request.method == 'POST':
+        Items = session.query(Category).filter_by(name = cat_name)
+        newItem = CatItem(
+        name = request.form['name'],
+        description = request.form['Description'],
+        cat_name = cat_name)
+        session.add(newItem)
+        session.commit()
+        return redirect(url_for('showItems', cat_name = cat_name))
+    else:
+        return render_template('createItem.html', cat_name = cat_name)
 
 
 # @app.route('catalog/<catname>/<item>/edit', methods=['GET', 'POST'])
@@ -90,4 +89,4 @@ def showItems(cat_name):
 
 if __name__ == '__main__':
   app.debug = True
-  app.run(host = '0.0.0.0', port = 8000)
+  app.run(host = '0.0.0.0', port = 5000)

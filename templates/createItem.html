@@ -3,10 +3,8 @@
 <meta charset="utf-8">
 </HEAD>
 
-
 <header>
 
-<div class=right>  <a href='{{url_for('showCategories') }}' class="button">SING IN</a></div>
 
 </header>
  
@@ -16,12 +14,21 @@
 
 <body>
 <div>
-<h2> Categories </h2>
-{% for i in Categories %}   
-    <a href='{{url_for('showItems', cat_name = i.name) }}'>{{i.name}}</a>
-    <br>
-{% endfor %}
+<h2> Create new {{cat_name}} </h2>
+<form action= "{{url_for('createItem', cat_name = cat_name)}}" method = 'POST'>
+<p>Name:</p>
+        
+<input  type='text' size='30' name='name'>
 
+<p>Description:</p>
+
+<input type='text' size='30' name='Description'>
+
+<input class="button" type="submit" value="Create">
+
+<a href= '{{url_for('createItem', cat_name = cat_name)}}'>Cancel</a>
+
+</form>
 </div>
 </body>
 

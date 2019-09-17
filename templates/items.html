@@ -6,6 +6,7 @@
 
 <header>
     <a href='{{url_for('showCategories') }}'>BACK</a></div>
+    <a href='{{url_for('createItem', cat_name = Cat.name) }}'>CREATE</a></div>
 
 </header>
  
@@ -24,7 +25,7 @@
 </div>
 
 <div>
-    <h2>{{Cat_name}} Items</h2>
+    <h2>{{Cat.name}} Items</h2>
     {% for i in Items %}   
    {{i.name}}<br>
     {% endfor %}
