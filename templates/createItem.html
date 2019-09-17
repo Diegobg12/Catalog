@@ -1,0 +1,33 @@
+<html>
+<HEAD>
+<meta charset="utf-8">
+</HEAD>
+
+
+<header>
+
+<div class=right>  <a href='{{url_for('showCategories') }}' class="button">SING IN</a></div>
+
+</header>
+ 
+<head>
+    <h1>Catalog App</h1>
+</head>
+
+<body>
+<div>
+<h2> Categories </h2>
+{% for i in Categories %}   
+    <a href='{{url_for('showItems', cat_name = i.name) }}'>{{i.name}}</a>
+    <br>
+{% endfor %}
+
+</div>
+</body>
+
+
+<footer>
+    created by DIEGO BUSTOS
+</footer>
+
+</html>

@@ -25,22 +25,30 @@ def showItems(cat_name):
     # return "This Page will show all categories and the last item added"
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
+    Categories = session.query(Category).all()
     Cat = session.query(Category).filter_by(name = cat_name).one()
     Items = session.query(CatItem).filter_by(cat_name = Cat.name)
-    return render_template('items.html', Cat = Cat, Items = Items, cat_name= cat_name)
+    return render_template('items.html', Categories = Categories, Items = Items)
+# @app.route('/catalog/<cat_name>/<item_name>')
+# def ItemDescription(cat_name):
+#     # return "This Page will show all categories and the last item added"
+#     DBSession = sessionmaker(bind=engine)
+#     session = DBSession()
+#     Cat = session.query(Category).filter_by(name = cat_name).one()
+#     Items = session.query(CatItem).filter_by(cat_name = Cat.name)
+#     return render_template('items.html', Cat = Cat, Items = Items, cat_name= cat_name)
 
-
-# @app.route('catalog/<catname>/new', methods=['GET', 'POST'])
-# def createItems():
+# @app.route('/catalog/<cat_name>/new', methods=['GET', 'POST'])
+# def createItem(cat_name):
 #     DBSession = sessionmaker(bind=engine)
 #     session = DBSession()
 #     if request.method == 'POST':
-#         Items = session.query(CatItem).filter_by(cat_name = catname)
+#         Items = session.query(Category).filter_by(name = cat_name)
         
 #         newItem = MenuItem(
 #         name = request.form['name'],
 #         description = request.form['description']
-#         cat_name = catname)
+#         cat_name = cat_name)
 
 #         session.add(newItem)
 #         session.commit()

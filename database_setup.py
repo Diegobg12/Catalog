@@ -11,8 +11,6 @@ Base = declarative_base()
 
 # Users declaration
 
-def _get_date():
-    return datetime.datetime.now()
 
 class User(Base):
     __tablename__ = 'user'
@@ -42,7 +40,7 @@ class CatItem(Base):
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
     description = Column(String(250))
-    cat_name = Column(ForeignKey('category.name'))
+    cat_name = Column(String, ForeignKey('category.name'))
     category = relationship(Category)
     created_date = Column(DateTime, default=datetime.datetime.utcnow)
 
