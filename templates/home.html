@@ -19,10 +19,9 @@
 
 <div>
 
-{% for i in Categories %}
-
-            <p> {{ loop.index }} - {{i.name}}</p>
-
+{% for i in Categories %}   
+    <a href='{{url_for('showItems', cat_name = i.name) }}'>{{i.name}}</a>
+    <br>
 {% endfor %}
 
 </div>

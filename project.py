@@ -21,12 +21,12 @@ def showCategories():
 
 @app.route('/catalog/<cat_name>')
 @app.route('/catalog/<cat_name>/items')
-def showItems():
+def showItems(cat_name):
     # return "This Page will show all categories and the last item added"
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
-    Cat = session.query(Category).filter_by(name = catname).one()
-    Items = session.query(CatItem).filter_by(restaurant_id = Rest.id)
+    Cat = session.query(Category).filter_by(name = cat_name).one()
+    Items = session.query(CatItem).filter_by(cat_name = Cat.name)
     return render_template('items.html', Cat = Cat, Items = Items, cat_name= cat_name)
 
 
