@@ -1,0 +1,55 @@
+<html>
+<HEAD>
+<meta charset="utf-8">
+</HEAD>
+
+<header>
+
+
+</header>
+ 
+<head>
+    <h1>Catalog App</h1>
+</head>
+
+<body>
+<div>
+<h2> Create new {{cat_name}} </h2>
+<form action= "{{url_for('editItem', cat_name = cat_name)}}" method = 'POST'>
+<p>Name:</p>
+        
+<input  type='text' size='30' name='name'>
+
+<p>Description:</p>
+
+<input type='text' size='30' name='Description'>
+
+<input class="button" type="submit" value="Create">
+
+<a href= '{{url_for('createItem', cat_name = cat_name)}}'>Cancel</a>
+
+<p>Category</p>
+
+<select name="Category">
+   <option value="Soccer">Soccer</option> 
+   <option value="Baseball">Baseball</option> 
+   <option value="Basebal">Basebal</option>
+   <option value="Frisbee">Frisbee</option> 
+   <option value="Rock Climbing">Rock Climbing</option> 
+   <option value="Foosball">Foosball</option> 
+   <option value="Skating">Skating</option> 
+   <option value="Hockey">Hockey</option> 
+
+</select>
+<br>
+
+</form>
+</div>
+</body>
+
+
+<footer>
+    created by DIEGO BUSTOS
+</footer>
+
+</html>
