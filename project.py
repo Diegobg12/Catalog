@@ -76,17 +76,17 @@ def editItems(cat_name, item_name, item_id):
         return render_template(
             'editItem.html', cat_name=cat_name, item_name = item_name, item_id = item_id )
 
-# @app.route('/catalog/<catalog>/<item>/delete', methods=['GET', 'POST'])
-# def deleteItem(restaurant_id,menu_id):
-#     DBSession = sessionmaker(bind=engine)
-#     session = DBSession()
-#     itemToDelete = session.query(CatItem).filter_by(name=item_name).one()
-#     if request.method == 'POST':
-#         session.delete(itemToDelete)
-#         session.commit()
-#         return redirect(url_for('showMenu', restaurant_id=restaurant_id))
-#     else:
-#         return render_template('deleteMenu.html', cat_name=catname, item_name = item_name)
+@app.route('/catalog/<cat_name>/<item_name>/<item_id>/delete', methods=['GET', 'POST'])
+def deleteItem(cat_name, item_name, item_id):
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
+    itemToDelete = session.query(CatItem).filter_by(id = item_id).one()
+    if request.method == 'POST':
+        session.delete(itemToDelete)
+        session.commit()
+        return redirect(url_for('showItems', cat_name = cat_name))
+    else:
+        return render_template('deleteItem.html', cat_name = cat_name, itemToDelete = itemToDelete)
 
 
 
