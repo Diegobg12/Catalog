@@ -27,7 +27,7 @@
 <div>
     <h2>{{Cat.name}} Items</h2>
     {% for i in Items %}   
-    <a href='{{url_for('ItemDescription', cat_name = Cat.name, item_name= i.name) }}'>{{i.name}}</a><br>
+    <a href='{{url_for('ItemDescription', cat_name = Cat.name, item_name= i.name, item_id = i.id) }}'>{{i.name}}</a><br>
 
     {% endfor %}
 </div>

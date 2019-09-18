@@ -31,12 +31,13 @@ def showItems(cat_name):
     return render_template('items.html', Categories = Categories, Items = Items, Cat = Cat)
 
 @app.route('/catalog/<cat_name>/<item_name>')
-def ItemDescription(cat_name, item_name):
+@app.route('/catalog/<cat_name>/<item_name>/<item_id>')
+def ItemDescription(cat_name, item_name, item_id):
     # return "This Page will show all categories and the last item added"
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     Cat = session.query(Category).filter_by(name = cat_name).one()
-    Item = session.query(CatItem).filter_by(name = item_name, cat_name = cat_name).one()
+    Item = session.query(CatItem).filter_by(id = item_id).one()
     return render_template('description.html', Cat = Cat, Item = Item, cat_name = cat_name)
 
 @app.route('/catalog/<cat_name>/new', methods=['GET', 'POST'])
