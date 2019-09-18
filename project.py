@@ -57,24 +57,24 @@ def createItem(cat_name):
         return render_template('createItem.html', cat_name = cat_name)
 
 
-@app.route('/catalog/<catname>/<item>/edit', methods=['GET', 'POST'])
-def editItems(cat_name, item_name):
+@app.route('/catalog/<cat_name>/<item_name>/<item_id>/edit', methods=['GET', 'POST'])
+def editItems(cat_name, item_name, item_id):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
-    editedItem = session.query(CatItem).filter_by(cat_name = catname).one()
+    editedItem = session.query(CatItem).filter_by(id = item_id).one()
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
         if request.form['Description']:
             editedItem.description = request.form['Description']
         if request.form['Category']:
-            editedItem.description = request.form['Category']
+            editedItem.cat_name = request.form['Category']
         session.add(editedItem)
         session.commit()
-        return redirect(url_for('showItems', cat_name = catname))
+        return redirect(url_for('showItems', cat_name = cat_name))
     else:
         return render_template(
-            'editItem.html', cat_name=catname, item=editedItem)
+            'editItem.html', cat_name=cat_name, item_name = item_name, item_id = item_id )
 
 # @app.route('/catalog/<catalog>/<item>/delete', methods=['GET', 'POST'])
 # def deleteItem(restaurant_id,menu_id):
