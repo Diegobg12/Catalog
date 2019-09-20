@@ -40,7 +40,6 @@ class CatItem(Base):
     description = Column(String(250))
     cat_name = Column(String, ForeignKey('category.name'))
     category = relationship(Category)
-    created_date = Column(DateTime, default=datetime.datetime.utcnow)
 
     @property
     def serialize(self):
@@ -49,7 +48,7 @@ class CatItem(Base):
             'name': self.name,
             'description': self.description,
             'id': self.id,
-            'category': self.category,
+            'category': self.cat_name,
         }
 
 

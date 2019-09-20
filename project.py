@@ -15,14 +15,14 @@ session = DBSession()
 
 
 
+
 # Json for CATALOG--------------------------------------------------
 @app.route('/Catalog/JSON')
 def catalogJSON():
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
-    category = session.query(Category).all()
-    Items = session.query(Category).filter_by(cat_name=category.name).all()
-    return jsonify(Category=[i.serialize for i in category, j.serialize for j in Items])
+    Items = session.query(CatItem).all()
+    return jsonify(CatItem=[i.serialize for i in Items])
 
 
 # CRUD FUNCTIONS ---------------------------------------------------
@@ -34,7 +34,6 @@ def showCategories():
     Categories = session.query(Category).all()
     Items = session.query(CatItem).all()
     return render_template('home.html', Categories = Categories, Items = Items)
-
 
 @app.route('/catalog/<cat_name>')
 @app.route('/catalog/<cat_name>/items')
