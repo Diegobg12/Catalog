@@ -7,6 +7,7 @@
 <header>
     <a href='{{url_for('showCategories') }}'>BACK</a></div>
     <a href='{{url_for('createItem', cat_name = Cat.name) }}'>CREATE</a></div>
+    <a href='{{url_for('createItem', cat_name = Cat.name) }}'>SING IN</a></div>
 
 </header>
  
@@ -16,13 +17,20 @@
 
 <body>
 
-
 <div>
 <h2>Category</h2>
 {% for i in Categories %}   
 <a href='{{url_for('showItems', cat_name = i.name) }}'>{{i.name}}</a><br>
 {% endfor %}
 </div>
+
+<div>
+<h2>Last Items</h2>
+{% for i in lastItems %}   
+{{i.name}}
+{% endfor %}    
+</div>
+
 
 <div>
     <h2>{{Cat.name}} Items</h2>
