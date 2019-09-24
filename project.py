@@ -1,18 +1,32 @@
 
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-app = Flask(__name__)
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Category, CatItem, User
+
+from flask import session as login_session
+import random
+import string
+
+app = Flask(__name__)
 # Init DATABASE
 engine = create_engine('sqlite:///sportitmes.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+
+ 
+
 # Funtions for user log in-----------------------------------------
-
-
+@app.route('/login')
+def showLogin():
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                    for x in xrange(32))
+    login_session['state'] = state
+    return "The current session state is %s" % login_session['state']
 
 
 
@@ -107,5 +121,6 @@ def deleteItem(cat_name, item_name, item_id):
 
 
 if __name__ == '__main__':
-  app.debug = True
-  app.run(host = '0.0.0.0', port = 5000)
+    app.secret_key = 'super_secret_key'
+    app.debug = True
+    app.run(host = '0.0.0.0', port = 5000)
