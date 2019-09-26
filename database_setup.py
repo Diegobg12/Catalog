@@ -40,6 +40,7 @@ class CatItem(Base):
     description = Column(String(250))
     cat_name = Column(String, ForeignKey('category.name'))
     category = relationship(Category)
+    user = relationship(User)
 
     @property
     def serialize(self):
