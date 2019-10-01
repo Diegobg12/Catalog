@@ -4,37 +4,61 @@
 </HEAD>
 
 <header>
-
-
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style/style.css') }}">
+        <meta charset="utf-8">
 </header>
- 
-<head>
-    <h1>Catalog App</h1>
-</head>
 
+
+
+
+<head> 
+        <div class = "topWrapper">
+            <div>
+                <h1>Catalog App</h1>
+            </div>
+    
+          </div>
+    </head>
+    
+
+    
 <body>
-<div>
-<h2> Create new {{cat_name}} </h2>
-<form action= "{{url_for('createItem', cat_name = cat_name)}}" method = 'POST'>
-<p>Name:</p>
+
+        <div class="centro">
+            <div>
+                    <h2> Create new {{cat_name}} Item</h2>
+                    <form action= "{{url_for('createItem', cat_name = cat_name)}}" method = 'POST'>
+                                <br>
+                                <br>
+                    <p>Name:</p>
+                    <br>
+                    
+
+                    <input  type='text' size='30' name='name'>
+                    <br>
+                    <br>
         
-<input  type='text' size='30' name='name'>
+                    <p>Description:</p>
+                    <br>
+                    
+                    
+        
+                    <input type='text' size='30' name='Description'>
+            </div>
 
-<p>Description:</p>
+            <div>
+                        <br>
+                        <br>
+                    <input class="button" type="submit" value="Create">
+                    <a href= '{{url_for('showItems', cat_name = cat_name)}}' class=" Cancelbutton">Cancel</a>
+        
+            </div>
 
-<input type='text' size='30' name='Description'>
-
-<input class="button" type="submit" value="Create">
-
-<a href= '{{url_for('createItem', cat_name = cat_name)}}'>Cancel</a>
-
-</form>
-</div>
+            </form>
+        </div>
 </body>
 
 
-<footer>
-    created by DIEGO BUSTOS
-</footer>
+
 
 </html>

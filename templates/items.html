@@ -1,47 +1,59 @@
 <html>
-<HEAD>
-<meta charset="utf-8">
-</HEAD>
-
-
 <header>
-    <a href='{{url_for('showCategories') }}'>BACK</a></div>
-    <a href='{{url_for('createItem', cat_name = Cat.name) }}'>CREATE</a></div>
-    <a href='{{url_for('createItem', cat_name = Cat.name) }}'>SING IN</a></div>
-
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style/style.css') }}">
+        <meta charset="utf-8">
 </header>
- 
-<head>
 
+
+
+<head> 
+    <div class = "topWrapper">
+        <div>
+            <h1>Catalog App</h1>
+        </div>
+
+        <div>
+            <a href='{{url_for('showCategories') }}' class="button">BACK</a>
+            <a href='{{url_for('createItem', cat_name = Cat.name) }}' class="button">CREATE</a>
+            <a href='{{url_for('createItem', cat_name = Cat.name) }}' class="button">SING IN</a>
+        </div>
+
+      </div>
 </head>
+
+
+
 
 <body>
 
-<div>
-<h2>Category</h2>
-{% for i in Categories %}   
-<a href='{{url_for('showItems', cat_name = i.name) }}'>{{i.name}}</a><br>
-{% endfor %}
-</div>
+  <div class="Wrapper">
 
-<div>
-<h2>Last Items</h2>
-{% for i in lastItems %}   
-{{i.name}}
-{% endfor %}    
-</div>
+      <div>
+      
+        <h2>Categories</h2><hr>
+        <br>
+        <br>
+          {% for i in Categories %} 
+                <a href='{{url_for('showItems', cat_name = i.name) }}'>{{i.name}}</a>
+                <br>
+                <br>
+          {% endfor %}
+        
+      </div>
+      <div>
+            <h2>{{Cat.name}} Items</h2><hr>
+            <br>
+            <br>
+            {% for i in Items %}   
+            <br>
+            <br>
+            <a href='{{url_for('ItemDescription', cat_name = Cat.name, item_name= i.name, item_id = i.id) }}'>{{i.name}}</a><br>
+            {% endfor %}
+      
+      </div>
+    </div>
 
-
-<div>
-    <h2>{{Cat.name}} Items</h2>
-    {% for i in Items %}   
-    <a href='{{url_for('ItemDescription', cat_name = Cat.name, item_name= i.name, item_id = i.id) }}'>{{i.name}}</a><br>
-
-    {% endfor %}
-</div>
 </body>
-<footer>
-    created by DIEGO BUSTOS
-</footer>
+
 
 </html>

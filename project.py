@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Category, CatItem, User
@@ -197,9 +197,12 @@ def createItem(cat_name):
         cat_name = cat_name)
         session.add(newItem)
         session.commit()
+        flash('Item Successfully Created')
         return redirect(url_for('showItems', cat_name = cat_name))
+        flash('Item Successfully Created')
     else:
         return render_template('createItem.html', cat_name = cat_name)
+        flash('Item Successfully Created')
 
 
 @app.route('/catalog/<cat_name>/<item_name>/<item_id>/edit', methods=['GET', 'POST'])

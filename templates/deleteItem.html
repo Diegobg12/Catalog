@@ -1,24 +1,42 @@
 
 <html>
-    <HEAD>
-    <meta charset="utf-8">
-    <title>Delete Item</title>
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style/style.css') }}">
-    </HEAD>
-    
+
+        <HEAD>
+                <meta charset="utf-8">
+                </HEAD>
+                
+                <header>
+                        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style/style.css') }}">
+                        <meta charset="utf-8">
+                </header>
+
+                <head> 
+                        <div class = "topWrapper">
+                            <div>
+                                <h1>Catalog App</h1>
+                            </div>
+                          </div>
+                </head>
+                    
+
     <header>
   
     </header>
     <body>
 
-    <h1>Are you sure you want to delete {{itemToDelete.name}} from {{itemToDelete.cat_name}} list?</h1>
-    
-    <form action="{{ url_for('deleteItem',cat_name = cat_name, item_name= itemToDelete.name, item_id = itemToDelete.id)}}" method = 'post'>
-    
-    <input type='submit', value = 'Delete' class= "button">
-    <a href= '{{url_for('createItem', cat_name = cat_name)}}'>Cancel</a>
-          
-    </form>
+        <div class=" centro">
+
+                <h2>Are you sure you want to delete {{itemToDelete.name}} from {{itemToDelete.cat_name}} list?</h2> <hr>
+            
+                <form action="{{ url_for('deleteItem',cat_name = cat_name, item_name= itemToDelete.name, item_id = itemToDelete.id)}}" method = 'post'>
+                
+                    <input type='submit', value = 'Delete' class= "button">
+                    <a href= '{{url_for('showItems', cat_name = cat_name)}}' class="Cancelbutton">Cancel</a>
+                    
+                </form>
+
+        </div>
+
     
     </body>
     </html>

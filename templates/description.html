@@ -1,38 +1,45 @@
 <html>
-<HEAD>
-<meta charset="utf-8">
-</HEAD>
-
-
-<header>
-    <a href='{{url_for('showCategories') }}'>BACK</a></div>
-    <a href='{{url_for('createItem', cat_name = Cat.name) }}'>CREATE</a></div>
-
-</header>
- 
-<head>
-
-</head>
-
+        <header>
+                <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style/style.css') }}">
+                <meta charset="utf-8">
+        </header>
+        
+        
+        
+        <head> 
+            <div class = "topWrapper">
+                <div>
+                    <h1>Catalog App</h1>
+                </div>
+        
+                <div>
+                    <a href='{{url_for('showCategories') }}' class="Cancelbutton">BACK</a>
+                    <a href='{{url_for('createItem', cat_name = Cat.name) }}' class="button">SING IN</a>
+                </div>
+        
+              </div>
+        </head>
+        
 <body>
 
 
-<div>
-</div>
+    <div class="centro">
+            <h2>{{Item.name}}</h2><hr>
+            <p>{{Item.description}}</p>
+            <a href='{{url_for('editItems', cat_name = Cat.name, item_name= Item.name, item_id= Item.id) }}' class= "button">EDIT</a>
+            <a href='{{url_for('deleteItem', cat_name = Cat.name, item_name= Item.name, item_id= Item.id) }}' class= "Cancelbutton">DELETE</a>
 
-<div>
-    <h2>{{Item.name}}</h2>
-    <p>{{Item.description}}</p>
-    <a href='{{url_for('editItems', cat_name = Cat.name, item_name= Item.name, item_id= Item.id) }}'>EDIT</a></div>
-    <a href='{{url_for('deleteItem', cat_name = Cat.name, item_name= Item.name, item_id= Item.id) }}'>DELETE</a></div>
+    </div>
 
-</div>
+
+
+
 </body>
 
 
 
 <footer>
-    created by DIEGO BUSTOS
+
 </footer>
 
 </html>
