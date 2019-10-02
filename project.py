@@ -41,6 +41,7 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
+
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
@@ -124,26 +125,7 @@ def gconnect():
     print "done!"
     return output
 
-@app.route('/gdisconnect')
-def gdisconnect():
-    # Only disconnect a connected user.
-    access_token = login_session.get('access_token')
-    if access_token is None:
-        response = make_response(
-            json.dumps('Current user not connected.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[0]
-    if result['status'] == '200':
-        response = make_response(json.dumps('Successfully disconnected.'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-    else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
-        response.headers['Content-Type'] = 'application/json'
-        return response
+
 
 # Json for CATALOG--------------------------------------------------
 @app.route('/Catalog/JSON')
