@@ -193,7 +193,7 @@ def gdisconnect():
         flash('You has been log out')
         return redirect(url_for('showCategories'))
     else:
-        response = make_response(json.dumps('''Failed to revoke token 
+        response = make_response(json.dumps('''Failed to revoke token
                                             for given user.''', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
@@ -250,8 +250,8 @@ def ItemDescription(cat_name, item_name, item_id):
     Cat = session.query(Category).filter_by(name=cat_name).one()
     Item = session.query(CatItem).filter_by(id=item_id).one()
     creator = getUserInfo(Item.user_id)
-    if ('username' not in login_session or
-    creator.id != login_session['user_id']):
+    if 'username' not in login_session or  \
+            creator.id != login_session['user_id']:
         return render_template('publicDescription.html',
                                Cat=Cat,
                                Item=Item,
