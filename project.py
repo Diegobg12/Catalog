@@ -183,13 +183,12 @@ def gdisconnect():
         del login_session['picture']
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        flash('You has been log out')
+        return redirect(url_for('showCategories'))
     else:
         response = make_response(json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
-
-
 
 
 # Json for CATALOG--------------------------------------------------
@@ -209,7 +208,12 @@ def showCategories():
     session = DBSession()
     Categories = session.query(Category).all()
     Items = session.query(CatItem).all()
-    return render_template('home.html', Categories = Categories, Items = Items)
+    if 'username' not in login_session:
+        return render_template('home.html', Categories = Categories, Items = Items)    
+    else:
+        username = login_session['username']
+        pic = login_session['picture']
+        return render_template('home.html', Categories = Categories, Items = Items, username = username, pic = pic )
 
 @app.route('/catalog/<cat_name>')
 @app.route('/catalog/<cat_name>/items')

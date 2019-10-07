@@ -1,0 +1,40 @@
+<html>
+
+              
+              <head> 
+              <div class = "topWrapper">
+                  <div>
+                      <h1>Catalog App</h1>
+                  </div>
+              
+                  <div>
+                        {% if 'username' not in session %}
+                            <a href='{{url_for('showLogin') }}' class="button">LOG IN</a>
+                            
+                        {% else %}
+                        <img src={{pic}} height="42" width="42" alt="username"> {{username}}
+
+                            <a href='{{url_for('gdisconnect') }}' class="button">LOG OUT</a>
+ 
+                        {% endif %}
+                        
+                
+                        <div class = 'flash'>
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        
+                        <ul>
+                        {% for message in messages %}
+                            <li> <strong> {{ message }} </strong> </li>
+                        {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% endwith %}
+                        </div>
+
+
+                    </div>
+
+              </div>
+
+</html>

@@ -97,3 +97,13 @@ a:hover {
   cursor: pointer;
   
 }
+
+.LogInWrapper{
+  color: rgb(255, 255, 255);
+  max-width: 500px;
+  margin: auto;
+  display: grid;
+  border: solid;
+  margin: 5%;
+  text-align: center
+}
