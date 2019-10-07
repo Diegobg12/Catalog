@@ -4,7 +4,8 @@
               <head> 
               <div class = "topWrapper">
                   <div>
-                      <h1>Catalog App</h1>
+                      <h1>Catalog
+                            <br> App</h1>
                   </div>
               
                   <div>
@@ -12,8 +13,8 @@
                             <a href='{{url_for('showLogin') }}' class="button">LOG IN</a>
                             
                         {% else %}
-                        <img src={{pic}} height="42" width="42" alt="username"> {{username}}
-
+                        <img src={{pic}} height="42" width="42" alt="username"><br> {{username}}
+                        <br>
                             <a href='{{url_for('gdisconnect') }}' class="button">LOG OUT</a>
  
                         {% endif %}

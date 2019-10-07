@@ -223,7 +223,12 @@ def showItems(cat_name):
     Categories = session.query(Category).all()
     Cat = session.query(Category).filter_by(name = cat_name).one()
     Items = session.query(CatItem).filter_by(cat_name = Cat.name)
-    return render_template('items.html', Categories = Categories, Items = Items, Cat = Cat)
+    if 'username' not in login_session:
+        return render_template('items.html', Categories = Categories, Items = Items, Cat = Cat)
+    else:
+        username = login_session['username']
+        pic = login_session['picture']
+        return render_template('items.html', Categories = Categories, Items = Items, Cat = Cat, username = username, pic = pic)
 
 
 @app.route('/catalog/<cat_name>/<item_name>')
@@ -237,7 +242,9 @@ def ItemDescription(cat_name, item_name, item_id):
     if 'username' not in login_session or creator.id != login_session['user_id']:
         return render_template('publicDescription.html', Cat = Cat, Item = Item, cat_name = cat_name)
     else:
-        return render_template('description.html', Cat = Cat, Item = Item, cat_name = cat_name)
+        username = login_session['username']
+        pic = login_session['picture']
+        return render_template('description.html', Cat = Cat, Item = Item, cat_name = cat_name, username = username, pic = pic)
 
 
 @app.route('/catalog/<cat_name>/new', methods=['GET', 'POST'])
@@ -246,6 +253,8 @@ def createItem(cat_name):
         return redirect('/login')
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
+    username = login_session['username']
+    pic = login_session['picture']
     if request.method == 'POST':
         Items = session.query(Category).filter_by(name = cat_name)
         newItem = CatItem(
@@ -256,8 +265,7 @@ def createItem(cat_name):
         session.add(newItem)
         session.commit()
         flash('Item Successfully Created')
-        return redirect(url_for('showItems', cat_name = cat_name))
-        flash('Item Successfully Created')
+        return redirect(url_for('showItems', cat_name = cat_name, username = username, pic = pic))
     else:
         return render_template('createItem.html', cat_name = cat_name)
         flash('Item Successfully Created')
@@ -269,6 +277,8 @@ def editItems(cat_name, item_name, item_id):
         return redirect('/login')
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
+    username = login_session['username']
+    pic = login_session['picture']
     editedItem = session.query(CatItem).filter_by(id = item_id).one()
     if request.method == 'POST':
         if request.form['name']:
@@ -279,10 +289,10 @@ def editItems(cat_name, item_name, item_id):
             editedItem.cat_name = request.form['Category']
         session.add(editedItem)
         session.commit()
-        return redirect(url_for('showItems', cat_name = cat_name))
+        return redirect(url_for('showItems', cat_name = cat_name, username = username, pic = pic))
     else:
         return render_template(
-            'editItem.html', cat_name=cat_name, item_name = item_name, item_id = item_id )
+            'editItem.html', cat_name=cat_name, item_name = item_name, item_id = item_id, username = username, pic = pic )
 
 @app.route('/catalog/<cat_name>/<item_name>/<item_id>/delete', methods=['GET', 'POST'])
 def deleteItem(cat_name, item_name, item_id):
@@ -291,12 +301,14 @@ def deleteItem(cat_name, item_name, item_id):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     itemToDelete = session.query(CatItem).filter_by(id = item_id).one()
+    username = login_session['username']
+    pic = login_session['picture']
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
-        return redirect(url_for('showItems', cat_name = cat_name))
+        return redirect(url_for('showItems', cat_name = cat_name, username = username, pic = pic))
     else:
-        return render_template('deleteItem.html', cat_name = cat_name, itemToDelete = itemToDelete)
+        return render_template('deleteItem.html', cat_name = cat_name, itemToDelete = itemToDelete, username = username, pic = pic)
 
 
 
