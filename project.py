@@ -192,12 +192,13 @@ def gdisconnect():
 
 
 # Json for CATALOG--------------------------------------------------
-@app.route('/Catalog/JSON')
+@app.route('/catalog/JSON')
 def catalogJSON():
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     Items = session.query(CatItem).all()
     return jsonify(CatItem=[i.serialize for i in Items])
+
 
 
 # CRUD FUNCTIONS ---------------------------------------------------
