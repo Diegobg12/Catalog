@@ -4,22 +4,15 @@
         <meta charset="utf-8">
 </header>
 
+{% include "header.html" %}
 
-
-<head> 
-    <div class = "topWrapper">
-        <div>
-            <h1>Catalog App</h1>
-        </div>
 
         <div>
+
             <a href='{{url_for('showCategories') }}' class="button">BACK</a>
             <a href='{{url_for('createItem', cat_name = Cat.name) }}' class="button">CREATE</a>
             <a href='{{url_for('createItem', cat_name = Cat.name) }}' class="button">SING IN</a>
         </div>
-
-      </div>
-</head>
 
 
 

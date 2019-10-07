@@ -15,9 +15,9 @@ body{
   background-color: rgb(77, 75, 75);
   padding: 1%;
   color: rgb(255, 255, 253);
-  grid-template-columns: 50% 50%;
+  display: grid;
+  grid-template-columns: 80% 20%;
   border: solid;
-
 
 }
 

@@ -63,16 +63,16 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
-
-@app.route('/gconnect', methods=['GET', 'POST'])
+@app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    # Obtain authorization code
-    code = request.data
+    # Obtain authorization code, now compatible with Python3
+    request.get_data()
+    code = request.data.decode('utf-8')
 
     try:
         # Upgrade the authorization code into a credentials object
@@ -89,8 +89,12 @@ def gconnect():
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
            % access_token)
+    # Submit request, parse response - Python3 compatible
     h = httplib2.Http()
-    result = json.loads(h.request(url, 'GET')[1])
+    response = h.request(url, 'GET')[1]
+    str_response = response.decode('utf-8')
+    result = json.loads(str_response)
+
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
         response = make_response(json.dumps(result.get('error')), 500)
@@ -109,7 +113,6 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
-        print "Token's client ID does not match app's."
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -122,12 +125,12 @@ def gconnect():
         return response
 
     # Store the access token in the session for later use.
-    login_session['access_token'] = credentials.access_token
+    login_session['access_token'] = access_token
     login_session['gplus_id'] = gplus_id
 
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
-    params = {'access_token': credentials.access_token, 'alt': 'json'}
+    params = {'access_token': access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
 
     data = answer.json()
@@ -136,6 +139,12 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    # see if user exists, if it doesn't make a new one
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
+
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -143,10 +152,10 @@ def gconnect():
     output += '<img src="'
     output += login_session['picture']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
-    flash("Logged in as %s" % login_session['username'] )
-    print "done!"
+    flash("you are now logged in as %s" % login_session['username'])
     return output
 
+# User Helper Functions
 
 
 
@@ -179,61 +188,6 @@ def gdisconnect():
         response = make_response(json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
-
-
-
-
-
-
-# Disconnect Google Account.
-def gdisconnect():
-    """Disconnect the Google account of the current logged-in user."""
-
-    # Only disconnect the connected user.
-    access_token = login_session.get('access_token')
-    if access_token is None:
-        response = make_response(
-            json.dumps('Current user not connected.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[0]
-
-    if result['status'] == '200':
-        response = make_response(json.dumps('Successfully disconnected.'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-    else:
-        response = make_response(
-            json.dumps('Failed to revoke token for given user.'), 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-
-# Log out the currently connected user.
-@app.route('/logout')
-def logout():
-    """Log out the currently connected user."""
-
-    if 'username' in login_session:
-        gdisconnect()
-        del login_session['google_id']
-        del login_session['access_token']
-        del login_session['username']
-        del login_session['email']
-        del login_session['picture']
-        del login_session['user_id']
-        flash("You have been successfully logged out!")
-        return redirect(url_for('home'))
-    else:
-        flash("You were not logged in!")
-        return redirect(url_for('home'))
-
-
-
-
 
 
 
@@ -275,7 +229,11 @@ def ItemDescription(cat_name, item_name, item_id):
     session = DBSession()
     Cat = session.query(Category).filter_by(name = cat_name).one()
     Item = session.query(CatItem).filter_by(id = item_id).one()
-    return render_template('description.html', Cat = Cat, Item = Item, cat_name = cat_name)
+    creator = getUserInfo(Item.user_id)
+    if 'username' not in login_session or creator.id != login_session['user_id']:
+        return render_template('publicDescription.html', Cat = Cat, Item = Item, cat_name = cat_name)
+    else:
+        return render_template('description.html', Cat = Cat, Item = Item, cat_name = cat_name)
 
 
 @app.route('/catalog/<cat_name>/new', methods=['GET', 'POST'])
@@ -289,7 +247,8 @@ def createItem(cat_name):
         newItem = CatItem(
         name = request.form['name'],
         description = request.form['Description'],
-        cat_name = cat_name)
+        cat_name = cat_name,
+        user_id=login_session['user_id'])
         session.add(newItem)
         session.commit()
         flash('Item Successfully Created')
@@ -304,7 +263,6 @@ def createItem(cat_name):
 def editItems(cat_name, item_name, item_id):
     if 'username' not in login_session:
         return redirect('/login')
-
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     editedItem = session.query(CatItem).filter_by(id = item_id).one()
