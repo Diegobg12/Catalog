@@ -286,11 +286,15 @@ def createItem(cat_name):
 def editItems(cat_name, item_name, item_id):
     if 'username' not in login_session:
         return redirect('/login')
+
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     username = login_session['username']
     pic = login_session['picture']
     editedItem = session.query(CatItem).filter_by(id = item_id).one()
+    if editedItem.user_id != login_session['user_id']:
+        flash('You are not authorized to edit this item.')
+        return redirect(url_for('showCategories'))
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
@@ -314,6 +318,9 @@ def deleteItem(cat_name, item_name, item_id):
     itemToDelete = session.query(CatItem).filter_by(id = item_id).one()
     username = login_session['username']
     pic = login_session['picture']
+    if itemToDelete.user_id != login_session['user_id']:
+        flash('You are not authorized to delete this item.')
+        return redirect(url_for('showCategories'))
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
