@@ -27,7 +27,7 @@ APPLICATION_NAME = "Restaurant Menu Application"
 
 
 # Init DATABASE
-engine = create_engine('sqlite:///sportitmes.db')
+engine = create_engine('postgresql://catalog:password@localhost/catalog')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
@@ -384,4 +384,4 @@ def deleteItem(cat_name, item_name, item_id):
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='http://54.188.22.32/', port=5000)
