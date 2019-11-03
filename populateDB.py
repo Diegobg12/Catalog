@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
 from database_setup import User, Category, CatItem, Base
 
 engine = create_engine('postgresql://catalog:password@localhost/catalog')
@@ -54,4 +53,4 @@ Category8 = Category(name= "Hockey")
 session.add(Category8)
 session.commit()
 
-print "added categories items!"
+print("added categories items!")
