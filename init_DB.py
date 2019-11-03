@@ -42,4 +42,4 @@ Category8 = Category(name= "Hockey")
 session.add(Category8)
 session.commit()
 
-print "added categories items!"
+print("added categories items!")
