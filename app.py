@@ -27,7 +27,7 @@ APPLICATION_NAME = "Restaurant Menu Application"
 
 
 # Init DATABASE
-engine = create_engine('postgresql://catalog:password@localhost/catalog')
+engine = create_engine('sqlite:///sportitmes.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
@@ -168,14 +168,20 @@ def gconnect():
 def gdisconnect():
     access_token = login_session.get('access_token')
     if access_token is None:
+        print 'Access Token is None'
         response = make_response(json.dumps('Current user not connected.'),
                                  401)
         response.headers['Content-Type'] = 'application/json'
         return response
+    print 'In gdisconnect access token is %s', access_token
+    print 'User name is: '
+    print login_session['username']
     url = ('https://accounts.google.com/o/oauth2/revoke?token=%s'
            % login_session['access_token'])
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
+    print 'result is '
+    print result
     if result['status'] == '200':
         del login_session['access_token']
         del login_session['gplus_id']
@@ -238,17 +244,17 @@ def showCategories():
                                pic=pic)
 
 
-@app.route('/catalog/<cat_name>')
-@app.route('/catalog/<cat_name>/items')
-def showItems(cat_name):
+@app.route('/catalog/<cat_name>/<cat_id>')
+@app.route('/catalog/<cat_name>/<cat_id>/items')
+def showItems(cat_name, cat_id):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     Categories = session.query(Category).all()
     Cat = session.query(Category).filter_by(name=cat_name).one()
-    Items = session.query(CatItem).filter_by(cat_name=Cat.name)
+    Items = session.query(CatItem).filter_by(cat_id=Cat.id)
     if 'username' not in login_session:
         return render_template('items.html',
-                               Categories=Categories, Items=Items, Cat=Cat)
+                               Categories=Categories, Items=Items, Cat=Cat, cat_id =cat_id)
     else:
         username = login_session['username']
         pic = login_session['picture']
@@ -256,15 +262,16 @@ def showItems(cat_name):
                                Categories=Categories,
                                Items=Items, Cat=Cat,
                                username=username,
-                               pic=pic)
+                               pic=pic,
+                               cat_id =cat_id)
 
 
-@app.route('/catalog/<cat_name>/<item_name>')
-@app.route('/catalog/<cat_name>/<item_name>/<item_id>')
-def ItemDescription(cat_name, item_name, item_id):
+@app.route('/catalog/<cat_id>/<item_name>')
+@app.route('/catalog/<cat_name>/<cat_id>/<item_name>/<item_id>')
+def ItemDescription(cat_name, cat_id,item_name, item_id):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
-    Cat = session.query(Category).filter_by(name=cat_name).one()
+    Cat = session.query(Category).filter_by(id=cat_id).one()
     Item = session.query(CatItem).filter_by(id=item_id).one()
     creator = getUserInfo(Item.user_id)
     if ('username' not in login_session or
@@ -272,7 +279,8 @@ def ItemDescription(cat_name, item_name, item_id):
         return render_template('publicDescription.html',
                                Cat=Cat,
                                Item=Item,
-                               cat_name=cat_name)
+                               cat_name=cat_name,
+                               cat_id =cat_id)
     else:
         username = login_session['username']
         pic = login_session['picture']
@@ -281,11 +289,12 @@ def ItemDescription(cat_name, item_name, item_id):
                                Item=Item,
                                cat_name=cat_name,
                                username=username,
-                               pic=pic)
+                               pic=pic,
+                               cat_id =cat_id)
 
 
-@app.route('/catalog/<cat_name>/new', methods=['GET', 'POST'])
-def createItem(cat_name):
+@app.route('/catalog/<cat_name>/<cat_id>/new', methods=['GET', 'POST'])
+def createItem(cat_name, cat_id):
     if 'username' not in login_session:
         return redirect('/login')
     DBSession = sessionmaker(bind=engine)
@@ -297,7 +306,7 @@ def createItem(cat_name):
         newItem = CatItem(
                         name=request.form['name'],
                         description=request.form['Description'],
-                        cat_name=cat_name,
+                        cat_id=cat_id,
                         user_id=login_session['user_id'])
         session.add(newItem)
         session.commit()
@@ -305,15 +314,16 @@ def createItem(cat_name):
         return redirect(url_for('showItems',
                         cat_name=cat_name,
                         username=username,
-                        pic=pic))
+                        pic=pic,
+                        cat_id =cat_id))
     else:
-        return render_template('createItem.html', cat_name=cat_name)
+        return render_template('createItem.html', cat_name=cat_name, cat_id =cat_id)
         flash('Item Successfully Created')
 
 
-@app.route('/catalog/<cat_name>/<item_name>/<item_id>/edit',
+@app.route('/catalog/<cat_name>/<cat_id>/<item_name>/<item_id>/edit',
            methods=['GET', 'POST'])
-def editItems(cat_name, item_name, item_id):
+def editItems(cat_name, cat_id, item_name, item_id):
     if 'username' not in login_session:
         return redirect('/login')
 
@@ -330,26 +340,28 @@ def editItems(cat_name, item_name, item_id):
             editedItem.name = request.form['name']
         if request.form['Description']:
             editedItem.description = request.form['Description']
-        if request.form['Category']:
-            editedItem.cat_name = request.form['Category']
+        # if request.form['Category']:
+        #     editedItem.cat_name = request.form['Category']
         session.add(editedItem)
         session.commit()
         return redirect(url_for('showItems',
                                 cat_name=cat_name,
                                 username=username,
-                                pic=pic))
+                                pic=pic,
+                                cat_id = cat_id))
     else:
         return render_template('editItem.html',
                                cat_name=cat_name,
                                item_name=item_name,
                                item_id=item_id,
                                username=username,
-                               pic=pic)
+                               pic=pic,
+                               cat_id=cat_id)
 
 
-@app.route('/catalog/<cat_name>/<item_name>/<item_id>/delete',
+@app.route('/catalog/<cat_name>/<cat_id>/<item_name>/<item_id>/delete',
            methods=['GET', 'POST'])
-def deleteItem(cat_name, item_name, item_id):
+def deleteItem(cat_name, cat_id, item_name, item_id):
     if 'username' not in login_session:
         return redirect('/login')
     DBSession = sessionmaker(bind=engine)
@@ -366,16 +378,18 @@ def deleteItem(cat_name, item_name, item_id):
         return redirect(url_for('showItems',
                                 cat_name=cat_name,
                                 username=username,
-                                pic=pic))
+                                pic=pic,
+                                cat_id =cat_id))
     else:
         return render_template('deleteItem.html',
                                cat_name=cat_name,
                                itemToDelete=itemToDelete,
                                username=username,
-                               pic=pic)
+                               pic=pic,
+                               cat_id =cat_id)
 
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host = '0.0.0.0', port = 5000)
+    app.run(host='0.0.0.0', port=5000)

@@ -10,11 +10,11 @@
     <div class=" centro">
 
         
-            <h2> Create new {{cat_name}} </h2>
+            <h2> Edit {{cat_name}} </h2>
             <br>
             <br>
             
-            <form action= "{{url_for('editItems', cat_name=cat_name, item_name = item_name, item_id = item_id )}}" method = 'POST'>
+            <form action= "{{url_for('editItems', cat_name = cat_name, cat_id = cat_id, item_name = item_name, item_id = item_id )}}" method = 'POST'>
             <p>Name:</p>
                     
             <input  type='text' size='30' name='name' required placeholder='{{item_name}}' required>
@@ -26,7 +26,7 @@
             <input type='text' size='30' name='Description' required>
             <br>
             <br>
-                <p>Category</p>
+                <!-- <p>Category</p>
                 <select name="Category">
                 <option value="Soccer">Soccer</option> 
                 <option value="Baseball">Baseball</option> 
@@ -36,13 +36,13 @@
                 <option value="Foosball">Foosball</option> 
                 <option value="Skating">Skating</option> 
                 <option value="Hockey">Hockey</option> 
-                </select>
+                </select> -->
                 <br>
                 <br>
                 <div>
                         <input class="button" type="submit" value="Edit">
 
-                        <a href= '{{url_for('showItems', cat_name = cat_name)}}' class="Cancelbutton">Cancel</a>
+                        <a href= '{{url_for('showItems', cat_name = cat_name, cat_id = cat_id)}}' class="Cancelbutton">Cancel</a>
                 </div>
 
             </form>

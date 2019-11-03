@@ -38,7 +38,7 @@ class CatItem(Base):
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
     description = Column(String(250))
-    cat_name = Column(String, ForeignKey('category.name'))
+    cat_id = Column(String, ForeignKey('category.id'))
     category = relationship(Category)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
@@ -54,7 +54,7 @@ class CatItem(Base):
         }
 
 
-engine = create_engine('postgresql://catalog:password@localhost/catalog')
+engine = create_engine('sqlite:///sportitmes.db')
 
 
 Base.metadata.create_all(engine)

@@ -9,8 +9,8 @@
     <div class="centro">
             <h2>{{Item.name}}</h2><hr>
             <p>{{Item.description}}</p>
-            <a href='{{url_for('editItems', cat_name = Cat.name, item_name= Item.name, item_id= Item.id) }}' class= "button">EDIT</a>
-            <a href='{{url_for('deleteItem', cat_name = Cat.name, item_name= Item.name, item_id= Item.id) }}' class= "Cancelbutton">DELETE</a>
+            <a href='{{url_for('editItems', cat_name = Cat.name, cat_id = cat_id , item_name= Item.name, item_id= Item.id) }}' class= "button">EDIT</a>
+            <a href='{{url_for('deleteItem', cat_name = Cat.name, cat_id = cat_id, item_name= Item.name, item_id= Item.id) }}' class= "Cancelbutton">DELETE</a>
 
     </div>
 

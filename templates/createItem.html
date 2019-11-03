@@ -8,7 +8,7 @@
         <div class="centro">
             <div>
                     <h2> Create new {{cat_name}} Item</h2>
-                    <form action= "{{url_for('createItem', cat_name = cat_name)}}" method = 'POST'>
+                    <form action= "{{url_for('createItem', cat_name = cat_name, cat_id = cat_id)}}" method = 'POST'>
                                 <br>
                                 <br>
                     <p>Name:</p>
@@ -30,7 +30,7 @@
                         <br>
                         <br>
                     <input class="button" type="submit" value="Create">
-                    <a href= '{{url_for('showItems', cat_name = cat_name)}}' class=" Cancelbutton">Cancel</a>
+                    <a href= '{{url_for('showItems', cat_name = cat_name, cat_id = cat_id)}}' class=" Cancelbutton">Cancel</a>
         
             </div>
 

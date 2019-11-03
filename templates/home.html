@@ -15,7 +15,7 @@
             {% for i in Categories %} 
             <br>
             <br>
-                <a href='{{url_for('showItems', cat_name = i.name) }}'>{{i.name}}</a>
+                <a href='{{url_for('showItems', cat_name = i.name, cat_id = i.id) }}'>{{i.name}}{{i.id}}</a>
 
             {% endfor %}
       </div>
@@ -26,7 +26,7 @@
         {% for i in Items %}
         <br>
         <br>
-        <a href='{{url_for('ItemDescription', cat_name = i.cat_name, item_name= i.name, item_id = i.id) }}'>{{i.name}}</a> ({{i.cat_name}})
+        <!-- <a href='{{url_for('ItemDescription', cat_name = cat_name ,cat_id = i.cat_id, item_name= i.name, item_id = i.id) }}'>{{i.name}}</a> ({{i.cat_id}}) -->
         {% endfor %}
       </div>
   </div>
