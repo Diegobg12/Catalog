@@ -21,3 +21,8 @@ Take a look in [Udacity's FAQ](https://classroom.udacity.com/nanodegrees/nd004/p
 ## Ready to RUN!
 1. run ```python project.py```
 2. Go to ```http://localhost:5000/``` in your favorite browser.
+3. You should get this 
+
+![Screenshot](Catalog-screenshot.png)
+
+4. Enjoy it!
