@@ -1,8 +1,6 @@
-# Project: Catalog Project
+# Catalog Project
 
-Project 2 from Udacity's Full-Stack web program
-
-The App was built using Python, Flask and SQLAlchemy. The app suppor Google Autentication and only registed users can edit and delate their own itmes. People who is not registed will be allow to see the items but not create, edit or delate.
+This App was built using Python3, Flask and SQLAlchemy. The app suppor Google Autentication and only registed users can edit and delate their own itmes. People who is not registed will be allow to see the items but not create, edit or delate.
 
 # Run The Project
 ## Set Up First
