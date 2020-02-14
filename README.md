@@ -8,12 +8,9 @@ This App was built using Python3, Flask and SQLAlchemy. The app suppor Google Au
 1. Install [Vagrant](https://www.vagrantup.com)
 2. Install [VrtualBox](https://www.virtualbox.org/)
 3. Get [Vagrant Set Up](https://github.com/udacity/fullstack-nanodegree-vm)
-4. Download and Unzip the database from [DB](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip)
-5. Take Data Base (DB) into vagrant folder.
-6. Get Python code and expected answers from [Logs Analysis](https://github.com/Diegobg12/DB_Project.git)
 7. Take the files into vagrant folder.
-8. Run vagrant up to build th Virtual Machine
-9. Run Vagrant ssh to connect
+8. Run ``vagrant up`` to build th Virtual Machine
+9. Run ``vagrant ssh`` to connect.
 10. cd into the ```cd /vagrant/Catalog```
 
 ## Erros running Vagrant?
